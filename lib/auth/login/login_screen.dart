@@ -3,6 +3,7 @@ import 'package:buddy_swap/app_config.dart';
 import 'package:buddy_swap/auth/login/dev_users_dropdown.dart';
 import 'package:buddy_swap/user/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -115,6 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           label: const Text('Connect Wallet'),
                           onPressed: () {
                             Provider.of<AuthProvider>(context, listen: false).login(_loggedInUser);
+                            GoRouter.of(context).go('/buy');
                           },
                         )),
                   ],

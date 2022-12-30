@@ -27,7 +27,7 @@ class _DevUsersDropdownState extends State<DevUsersDropdown> {
   @override
   void initState() {
     super.initState();
-    _dropdownValue = _devUsers.first;
+    dropdownCallback(_devUsers.first);
   }
 
   @override

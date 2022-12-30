@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'auth/login/login_screen.dart';
+import 'go_router/go_router.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -23,12 +24,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<AuthProvider, BuyProvider>(create: (_) => BuyProvider(), update: (ctx, auth, previousBuyProvider) => BuyProvider(auth, previousBuyProvider)),
         ChangeNotifierProxyProvider<AuthProvider, SellProvider>(create: (_) => SellProvider(), update: (ctx, auth, previousBuyProvider) => SellProvider(auth, previousBuyProvider)),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Flutter Demo',
         theme: config.theme,
         darkTheme: config.darkTheme,
         themeMode: ThemeMode.system,
-        home: const LoginScreen(),//MyHomePage(title: 'Flutter Demo Home Page'),
+        routerConfig: router,//MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
   }
