@@ -4,9 +4,9 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 
 class SellOrderModel {
-  Decimal cryptoAmount = Decimal.zero;
+  double cryptoAmount = 0.0;
   CryptoType cryptoType = CryptoType.ethereum;
-  Decimal price = Decimal.zero;
+  double price = 0.0;
   FiatType fiatType = FiatType.zar;
   String owner;
 

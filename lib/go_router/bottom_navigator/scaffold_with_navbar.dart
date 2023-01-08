@@ -15,6 +15,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -45,7 +46,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith('/sell')) {
       return 1;
     }
-    if (location.startsWith('/c')) {
+    if (location.startsWith('/settings')) {
       return 2;
     }
     return 0;
@@ -60,7 +61,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
         GoRouter.of(context).go('/sell');
         break;
       case 2:
-        GoRouter.of(context).go('/c');
+        GoRouter.of(context).go('/settings');
         break;
     }
   }

@@ -39,6 +39,8 @@ dependencies:
   decimal: ^2.3.2
   retry: ^3.1.0
   json_annotation: ^4.7.0
+  flutter_svg: ^1.1.6
+  flutter_svg_provider: ^1.0.3
   flutter:
     sdk: flutter
 
@@ -78,6 +80,7 @@ flutter:
     - assets/images/ethereum-eth-logo.png
     - assets/images/south-africa.png
     - assets/images/united-states-of-america.png
+    - assets/images/undraw-empty.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

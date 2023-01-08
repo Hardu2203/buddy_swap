@@ -8,15 +8,17 @@ class AppConfig extends InheritedWidget {
   final String appTitle;
   final ThemeData theme;
   final ThemeData darkTheme;
+  final ThemeMode themeMode;
 
-  const AppConfig({
-    Key? key,
-    required Widget child,
-    required this.environment,
-    required this.appTitle,
-    required this.theme,
-    required this.darkTheme
-  }) : super(
+  const AppConfig(
+      {Key? key,
+      required Widget child,
+      required this.environment,
+      required this.appTitle,
+      required this.theme,
+      required this.darkTheme,
+      required this.themeMode})
+      : super(
           key: key,
           child: child,
         );

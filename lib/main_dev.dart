@@ -1,12 +1,19 @@
-
+import 'package:buddy_swap/constants.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_config.dart';
 import 'my_app.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var prefs = await SharedPreferences.getInstance();
+
+  if (!prefs.containsKey(kDevThemeMode)) {
+    prefs.setString(kDevThemeMode, ThemeMode.system.name.toString());
+  }
+
   var configuredApp = AppConfig(
     environment: Environment.dev,
     appTitle: '[DEV]',
@@ -49,8 +56,8 @@ void main() {
     ),
 // If you do not have a themeMode switch, uncomment this line
 // to let the device system mode control the theme mode:
-// themeMode: ThemeMode.system,
-    child: MyApp(),
+    themeMode: ThemeMode.values.firstWhere((element) => element.name == prefs.getString(kDevThemeMode)),
+    child: const MyApp(),
   );
   runApp(configuredApp);
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:buddy_swap/constants.dart';
 import 'package:buddy_swap/crypto/crypto_types.dart';
 import 'package:buddy_swap/fiat/fiat_type.dart';
 import 'package:buddy_swap/sell/sell_provider.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 
 class SellScreen extends StatefulWidget {
   const SellScreen({Key? key}) : super(key: key);
@@ -45,7 +47,24 @@ class _SellScreenState extends State<SellScreen> {
           return Stack(
             children: [
               sellProvider.sellOrders.isEmpty
-                  ? const Text("No item in the list")
+                  ? Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                            margin: EdgeInsets.all(deviceSize.width * 0.02),
+                            // color: Colors.pink,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                opacity: 0.5,
+                                image: Svg(kUndrawEmpty),
+                              ),
+                            ),
+                          ),
+                      ),
+                      Expanded(child: Text("Create your first sell order", style: GoogleFonts.permanentMarker(
+                          textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).textTheme.titleLarge?.color?.withOpacity(0.5))))),
+                    ],
+                  )
                   : ListView.builder(
                       itemCount: sellProvider.sellOrders.length,
                       shrinkWrap: true,
@@ -61,9 +80,11 @@ class _SellScreenState extends State<SellScreen> {
                             sellOrder.cryptoType.logo,
                             height: 40,
                           ),
-                          trailing: Icon(
-                            Icons.delete,
-                            color: Theme.of(context).errorColor,
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            color: Theme.of(context).errorColor, onPressed: () {
+                              sellProvider.deleteSellOrder(index);
+                          },
                           ),
                           title: Text(sellOrder.priceString),
                           subtitle: Text(

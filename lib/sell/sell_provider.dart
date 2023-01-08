@@ -9,23 +9,32 @@ import '../auth/auth_provider.dart';
 class SellProvider extends ChangeNotifier {
   SellProvider? _previousSellProvider;
 
-  AuthProvider? _authProvider;
+  final AuthProvider? _authProvider;
 
-  List<SellOrderModel> _sellOrders = [];
+  final List<SellOrderModel> _sellOrders = [];
   List<SellOrderModel> get sellOrders => _sellOrders;
 
   SellProvider([ this._authProvider, this._previousSellProvider]);
   
   void loadSellOrders() {
-    _sellOrders = [
-      SellOrderModel(Decimal.parse("0.1"), CryptoType.bitcoin, Decimal.fromInt(5000), FiatType.zar, SellOrderStatus.open, "0x339F31Df86D58BdbA677784da1c9a970Ec42B1b8")
-    ];
-    notifyListeners();
+    // _sellOrders = [
+    //   SellOrderModel(0.1, CryptoType.bitcoin, 5000, FiatType.zar, SellOrderStatus.open, "0x339F31Df86D58BdbA677784da1c9a970Ec42B1b8")
+    // ];
+    // notifyListeners();
   }
 
 
-  void createSellOrder() {
-    _sellOrders.add(SellOrderModel(Decimal.parse("0.1"), CryptoType.ethereum, Decimal.fromInt(5000), FiatType.zar, SellOrderStatus.open, "0x339F31Df86D58BdbA677784da1c9a970Ec42B1b8"));
+  void createSellOrder(double amount, CryptoType selectedCryptoType, double price, FiatType selectedFiatType) {
+    if (_authProvider?.loggedInUser?.publicKey == null) {
+      throw Exception("No logged in user");
+    }
+    String loggedInUser = _authProvider!.loggedInUser!.publicKey;
+    _sellOrders.add(SellOrderModel(amount, selectedCryptoType, price, selectedFiatType, SellOrderStatus.open, loggedInUser));
+    notifyListeners();
+  }
+
+  void deleteSellOrder(int index) {
+    _sellOrders.removeAt(index);
     notifyListeners();
   }
 

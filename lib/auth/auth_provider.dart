@@ -19,5 +19,7 @@ class AuthProvider extends ChangeNotifier {
     return _loggedInUser != null;
   }
 
+  UserModel? get loggedInUser => _loggedInUser;
+
 
 }

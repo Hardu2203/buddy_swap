@@ -1,6 +1,12 @@
 import 'package:buddy_swap/api/coin/coin-api.dart';
 import 'package:buddy_swap/fiat/fiat_type.dart';
+import 'package:buddy_swap/sell/create_sell_order_attribute.dart';
+import 'package:buddy_swap/sell/sell_details_attribute.dart';
+import 'package:buddy_swap/sell/sell_order_model.dart';
+import 'package:buddy_swap/sell/sell_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../api/coin/rate.dart';
 import '../crypto/crypto_types.dart';
@@ -14,10 +20,12 @@ class CreateSellOrderScreen extends StatefulWidget {
 
 class _CreateSellOrderScreenState extends State<CreateSellOrderScreen> {
   final _formKey = GlobalKey<FormState>();
-  final myController = TextEditingController(text: "0.0");
+  final priceController = TextEditingController(text: "0.0");
+  final amountController = TextEditingController(text: "0");
   late CryptoType selectedCryptoType;
   late FiatType selectedFiatType;
-  bool _errorState1 = false;
+  bool _priceNumberError = false;
+  bool _amountNumberError = false;
   CoinApi coinApi = CoinApi();
   double _priceSliderMin = 0;
   double _priceSliderMax = 100000;
@@ -47,21 +55,26 @@ class _CreateSellOrderScreenState extends State<CreateSellOrderScreen> {
   Future<void> setDefaultPrice() async {
     Rate? rate = await coinApi.getData<Rate>(
         "/${selectedCryptoType.ticker}/${selectedFiatType.ticker}",
-        (Map<String, dynamic> p0) => Rate.fromJson(p0));
+            (Map<String, dynamic> p0) => Rate.fromJson(p0));
 
     if (rate != null) {
-      double range = rate.rate.round() * 0.1;
-      setState(() {
-        myController.text = rate.rate.toString();
-        _priceSliderMin = rate.rate - range;
-        _priceSliderMax = rate.rate + range;
-      });
+      setSliderRange(rate.rate);
     }
+  }
+
+  void setSliderRange(double rate) {
+    double range = rate.round() * 0.1;
+    setState(() {
+      priceController.text = rate.toString();
+      _priceSliderMin = rate - range;
+      _priceSliderMax = rate + range;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Create sell order"),
       ),
@@ -73,8 +86,15 @@ class _CreateSellOrderScreenState extends State<CreateSellOrderScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: DropdownButtonFormField(
+                decoration: const InputDecoration(
+                  // filled: widget.filled ?? true,
+                    hintText:
+                    'Currency type',
+                    labelText:
+                    'Currency type',
+                ),
                 items: FiatType.values.map<DropdownMenuItem<FiatType>>(
-                  (FiatType ft) {
+                      (FiatType ft) {
                     return DropdownMenuItem<FiatType>(
                       value: ft,
                       child: Row(
@@ -100,8 +120,15 @@ class _CreateSellOrderScreenState extends State<CreateSellOrderScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: DropdownButtonFormField(
+                decoration: const InputDecoration(
+                  // filled: widget.filled ?? true,
+                  hintText:
+                  'Crypto type',
+                  labelText:
+                  'Crypto type',
+                ),
                 items: CryptoType.values.map<DropdownMenuItem<CryptoType>>(
-                  (CryptoType ct) {
+                      (CryptoType ct) {
                     return DropdownMenuItem<CryptoType>(
                       value: ct,
                       child: Row(
@@ -130,47 +157,123 @@ class _CreateSellOrderScreenState extends State<CreateSellOrderScreen> {
                 decoration: InputDecoration(
                   // filled: widget.filled ?? true,
                   hintText:
-                      '${selectedFiatType.displayName} per ${selectedCryptoType.displayName}',
+                  '${selectedFiatType.displayName} per ${selectedCryptoType
+                      .displayName}',
                   labelText:
-                      '${selectedFiatType.displayName} per ${selectedCryptoType.displayName}',
-                  errorText: _errorState1
-                      ? "Any entry without an 'a' will trigger this error"
+                  '${selectedFiatType.displayName} per ${selectedCryptoType
+                      .displayName}',
+                  errorText: _priceNumberError
+                      ? "Please ensure price is a valid number"
                       : null,
                 ),
-                controller: myController,
+                controller: priceController,
                 onChanged: (value) {
                   setState(() {
-                    if (value.contains('a') | value.isEmpty) {
-                      _errorState1 = false;
+                    if ((double.tryParse(value) != null) |
+                    (int.tryParse(value) != null)) {
+                      // setSliderRange(double.parse(value));
+                      _priceNumberError = false;
                     } else {
-                      _errorState1 = true;
+                      _priceNumberError = true;
                     }
                   });
                 },
               ),
             ),
-            Slider(
-              value: double.parse(myController.text),
-              onChanged: (value) {
-                setState(() {
-                  myController.text = value.toString();
-                });
-              },
-              min: _priceSliderMin,
-              max: _priceSliderMax,
+            Container(
+              padding: EdgeInsets.only(top: 8),
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 8, right: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [Text("-10%")],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [Text("-5%")],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: const [Text("+5%")],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: const [Text("+10%")],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Slider(
+                    value: getSliderValue(),
+                    onChanged: (getSliderValue() > _priceSliderMin &&
+                        getSliderValue() < _priceSliderMax)
+                        ? (value) {
+                      setState(() {
+                        priceController.text = value.toString();
+                      });
+                    }
+                        : null,
+                    min: _priceSliderMin,
+                    max: _priceSliderMax,
+                  ),
+                ],
+              ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  // filled: widget.filled ?? true,
+                  hintText: 'Amount in ${selectedCryptoType.displayName}',
+                  labelText: 'Amount in ${selectedCryptoType.displayName}',
+                  errorText: _amountNumberError
+                      ? "Please ensure price is a valid number"
+                      : null,
+                ),
+                controller: amountController,
+                onChanged: (value) {
+                  setState(() {
+                    if ((double.tryParse(value) != null) |
+                    (int.tryParse(value) != null)) {
+                      // setSliderRange(double.parse(value));
+                      _amountNumberError = false;
+                    } else {
+                      _amountNumberError = true;
+                    }
+                  });
+                },
+              ),
+            ),
+            CreateSellOrderAttribute(
+                label: "Total", value: selectedFiatType.denominator + getTotalPrice().toString()),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Center(
                 child: ElevatedButton(
                   onPressed: () {
                     // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {
+                    if (_priceNumberError == false &&
+                        _amountNumberError == false) {
                       // If the form is valid, display a snackbar. In the real world,
                       // you'd often call a server or save the information in a database.
+                      Provider.of<SellProvider>(context, listen: false).createSellOrder(double.parse(amountController.text), selectedCryptoType, double.parse(priceController.text), selectedFiatType);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(myController.text)),
+                        const SnackBar(content: Text("Sell order submitted")),
                       );
+                      context.pop();
                     }
                   },
                   child: const Text('Submit'),
@@ -181,5 +284,23 @@ class _CreateSellOrderScreenState extends State<CreateSellOrderScreen> {
         ),
       ),
     );
+  }
+
+  double getTotalPrice() {
+    if (double.tryParse(priceController.text) == null || double.tryParse(amountController.text) == null) {
+      return 0.0;
+    }
+    return (double.parse(priceController.text) * double.parse(amountController.text));
+  }
+
+  double getSliderValue() =>
+      (double.tryParse(priceController.text) != null &&
+          between(double.tryParse(priceController.text), _priceSliderMin,
+              _priceSliderMax))
+          ? double.parse(priceController.text)
+          : (_priceSliderMin + _priceSliderMax) / 2;
+
+  bool between(double? value, double priceSliderMin, double priceSliderMax) {
+    return value! > _priceSliderMin && value < _priceSliderMax;
   }
 }
