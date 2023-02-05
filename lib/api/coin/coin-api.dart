@@ -11,8 +11,7 @@ class CoinApi {
     'X-CoinAPI-Key': kCoinApiKey
   };
 
-  static final CoinApi api =
-  CoinApi._internal(); //Only instance of the class
+  static final CoinApi api =  CoinApi._internal(); //Only instance of the class
 
   ///Factory constructor to return instance;
   factory CoinApi() {

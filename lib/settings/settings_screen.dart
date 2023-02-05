@@ -1,8 +1,11 @@
+import 'package:buddy_swap/auth/auth_provider.dart';
 import 'package:buddy_swap/constants.dart';
 import 'package:buddy_swap/utils/utlis.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app_config.dart';
@@ -18,6 +21,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   late AppConfig config = AppConfig.of(context)!;
   SharedPreferences? _prefs;
   ThemeMode? _selectedThemeMode;
+  AuthProvider? _authProvider;
 
   @override
   void initState() {
@@ -25,6 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       initializePrefs();
       setSelectedThemeMode();
+      _authProvider = Provider.of<AuthProvider>(context, listen: false);
     });
   }
 
@@ -89,6 +94,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     isExpanded: true,
                   ),
                 ),
+              ),
+              ListTile(
+                title: const Text("Logout"),
+                trailing: const Icon(Icons.logout),
+                onTap: () {
+                  _authProvider?.logout();
+                  context.go('/login');
+                },
+              ),
+              ListTile(
+                title: const Text("Bank details"),
+                trailing: const Icon(Icons.details),
+                onTap: () {
+                  context.go("/settings/bank");
+                },
               )
             ],
           ),

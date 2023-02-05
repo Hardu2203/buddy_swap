@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../auth/login/login_screen.dart';
+import '../bank/bank_details_screen.dart';
 import '../home/home_screen.dart';
 import 'bottom_navigator/scaffold_with_navbar.dart';
 
@@ -77,6 +78,14 @@ final router = GoRouter(
             path: '/settings',
             pageBuilder: (BuildContext context, GoRouterState state) =>
                 FadeTransitionPage(key: sellDetails, child: const SettingsScreen()),
+            routes: [
+              GoRoute(
+                path: 'bank',
+                pageBuilder: (BuildContext context, GoRouterState state) =>
+                    FadeTransitionPage(
+                        key: buyDetails, child: const BankDetailsScreen()),
+              ),
+            ]
           ),
         ]),
   ],

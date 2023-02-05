@@ -181,11 +181,11 @@ class _CreateSellOrderScreenState extends State<CreateSellOrderScreen> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.only(top: 8),
               child: Stack(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 8, right: 8),
+                    padding: const EdgeInsets.only(left: 8, right: 8),
                     child: Row(
                       children: [
                         Expanded(

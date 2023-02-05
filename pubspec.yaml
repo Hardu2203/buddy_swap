@@ -81,6 +81,7 @@ flutter:
     - assets/images/south-africa.png
     - assets/images/united-states-of-america.png
     - assets/images/undraw-empty.svg
+    - assets/images/undraw-savings.svg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
