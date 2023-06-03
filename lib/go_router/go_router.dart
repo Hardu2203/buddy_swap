@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 
 import '../auth/login/login_screen.dart';
 import '../bank/bank_details_screen.dart';
-import '../home/home_screen.dart';
 import 'bottom_navigator/scaffold_with_navbar.dart';
 
 const ValueKey<String> bottonNavBar = ValueKey<String>('Bottom Nav');

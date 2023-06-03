@@ -3,8 +3,19 @@ import 'package:buddy_swap/user/user_model.dart';
 
 class DevAuthFunctions implements AuthFunctions {
   @override
-  UserModel login([UserModel? user]) {
+  Future<UserModel> getPublicKey([UserModel? user]) async {
     return user!;
   }
 
+  @override
+  Future<String?> sendTransaction() {
+    // TODO: implement sendTransaction
+    throw UnimplementedError();
+  }
+
+  @override
+  signMessage(String nonce) {
+    // TODO: implement signMessage
+    throw UnimplementedError();
+  }
 }

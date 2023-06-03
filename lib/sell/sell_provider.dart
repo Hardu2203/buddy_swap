@@ -11,7 +11,9 @@ class SellProvider extends ChangeNotifier {
 
   final AuthProvider? _authProvider;
 
-  final List<SellOrderModel> _sellOrders = [];
+  final List<SellOrderModel> _sellOrders = [
+    SellOrderModel(0.1, CryptoType.bitcoin, 5000, FiatType.zar, SellOrderStatus.open, "0x339F31Df86D58BdbA677784da1c9a970Ec42B1b8")
+  ];
   List<SellOrderModel> get sellOrders => _sellOrders;
 
   SellProvider([ this._authProvider, this._previousSellProvider]);
@@ -25,10 +27,10 @@ class SellProvider extends ChangeNotifier {
 
 
   void createSellOrder(double amount, CryptoType selectedCryptoType, double price, FiatType selectedFiatType) {
-    if (_authProvider?.loggedInUser?.publicKey == null) {
-      throw Exception("No logged in user");
-    }
-    String loggedInUser = _authProvider!.loggedInUser!.publicKey;
+    // if (_authProvider?.loggedInUser?.publicKey == null) {
+    //   throw Exception("No logged in user");
+    // }
+    String loggedInUser = 'hardu'; //_authProvider!.loggedInUser!.publicKey;
     _sellOrders.add(SellOrderModel(amount, selectedCryptoType, price, selectedFiatType, SellOrderStatus.open, loggedInUser));
     notifyListeners();
   }

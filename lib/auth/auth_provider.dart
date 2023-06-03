@@ -8,28 +8,30 @@ import '../api/backend/backend-api.dart';
 
 class AuthProvider extends ChangeNotifier {
 
-  UserModel? _loggedInUser;
+  UserModel? loggedInUser;
   AuthFunctions authFunctions;
-  final BackendApi _backendApi = BackendApi();
 
   AuthProvider(this.authFunctions);
 
-  void login([UserModel? user]) {
-    _loggedInUser = authFunctions.login(user);
-    _backendApi.
+  Future<String> getPublicKey([UserModel? user]) async {
+    return (await authFunctions.getPublicKey(user)).publicKey;
+  }
+
+  Future<String?> sendTransaction() async {
+    return await authFunctions.sendTransaction();
   }
 
   void logout() {
-    _loggedInUser = null;
+    loggedInUser = null;
     notifyListeners();
   }
 
   bool isLoggedIn() {
-    return _loggedInUser != null;
+    return loggedInUser != null;
   }
 
-  UserModel? get loggedInUser => _loggedInUser;
-
-
+  Future<String> signMessage(String nonce) async {
+    return await authFunctions.signMessage(nonce);
+  }
 
 }

@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:buddy_swap/api/backend/backend-api.dart';
 import 'package:buddy_swap/app_config.dart';
 import 'package:buddy_swap/auth/login/dev_users_dropdown.dart';
 import 'package:buddy_swap/user/user_model.dart';
@@ -17,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late UserModel? _loggedInUser;
+  UserModel? _loggedInUser;
 
   List<Widget> devUserSelect(Size deviceSize) {
     return [
@@ -114,9 +115,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 24,
                           ),
                           label: const Text('Connect Wallet'),
-                          onPressed: () {
-                            Provider.of<AuthProvider>(context, listen: false).login(_loggedInUser);
-                            GoRouter.of(context).go('/buy');
+                          onPressed: () async {
+                            var login = await Provider.of<BackendApi>(context, listen: false).login(_loggedInUser);
+                            if (context.mounted && login) GoRouter.of(context).go('/buy');
                           },
                         )),
                   ],

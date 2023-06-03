@@ -3,8 +3,8 @@ import 'package:buddy_swap/user/user_model.dart';
 class DevUsers {
 
   Set<UserModel> get devUsers  => {
-    UserModel("micheal", "0xb03f605d6a1ec29791d36ad2cc7a9fae50f43ef73d2e28db1485170a1d8d5c30", "0x4403796DB30D6A9370564ac32C3302c028e9D84D"),
-    UserModel("jim", "0x86b15ae9c570ad484c649c2066b45f4f12b765bfe6481f37ab0c108ad57a1e8c", "0x594a619E6050E7e7868EEb9ae7fD98DA84B74A71"),
+    UserModel("micheal", "0x439f21e879bc0fd185b984a011c0c9570e296c972aabb7464f3830454393e20b", "0x47f7Aa90bBD05944c0553Cf36B39c539a95291b9"),
+    UserModel("jim", "0x6ef2f9ab5d4721cad4d9f0e7446070ebf110beb738bbc2dd00fd9944e6a9c592", "0x1B9De33Cf41Bd6b8d1D06d5185655a22e7Fc3448"),
     UserModel("pam", "0x4617876588b439ae42807efc2d8fe247ab1d847a5f18a3f92e5f7b4d2dc0916d", "0xDa430965C7e2050251B83ad4b3DB0A3B5A01069a"),
     UserModel("dwight", "0x918b2e42a9de080caf1bd76222f32514d2fde8bb9791beeec888d2eaef043161", "0xeB7A2DCcF47D2db071C06A29996836240e81E8f7"),
     UserModel("angela", "0x42f0aab81db4d55a920174e57cbfcc1a714f67165a62e894809e1489e7144605", "0xfe064aD7cE88cA4128a52e357B2b4e60e798Ba01"),
