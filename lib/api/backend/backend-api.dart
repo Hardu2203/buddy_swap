@@ -1,6 +1,6 @@
 
 
-import 'package:buddy_swap/constants.dart';
+import 'package:buddy_swap/environment_config.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../auth/auth_provider.dart';
@@ -43,10 +43,10 @@ class BackendApi extends ChangeNotifier {
 
 
 
-    return await BaseRequest<T>(kBackendApiUrl, path,  ReqType.get, mapping, json, headers, queryParams).execute();
+    return await BaseRequest<T>(EnvironmentConfig.backendApiUrl, path,  ReqType.get, mapping, json, headers, queryParams).execute();
   }
 
   Future<T?> post<T>(String path, [ T Function(Map<String, dynamic>)? mapping, Object? json, Map<String, String>? headers, Map<String, dynamic>? queryParams ]) async {
-    return await BaseRequest<T>(kBackendApiUrl, path,  ReqType.post, mapping, json, headers, queryParams).execute();
+    return await BaseRequest<T>(EnvironmentConfig.backendApiUrl, path,  ReqType.post, mapping, json, headers, queryParams).execute();
   }
 }

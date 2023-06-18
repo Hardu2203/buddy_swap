@@ -1,7 +1,6 @@
-import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+
+import 'package:buddy_swap/environment_config.dart';
 
 const String kBitcoinLogoPath = "assets/images/bitcoin-btc-logo.png";
 const String kEthereumLogoPath = "assets/images/ethereum-eth-logo.png";
@@ -13,8 +12,6 @@ const String kUndrawSavings = "assets/images/undraw-savings.svg";
 const String kDevThemeMode = "devThemeMode";
 const String kProdThemeMode = "prodThemeMode";
 
-const kCoinApiKey = String.fromEnvironment('COIN_API_KEY');
-const kBackendApiUrl = String.fromEnvironment('BACKEND_API');
 
-// const kChains =
 
+EnvironmentConfig kEnv = EnvironmentConfig.instance(); //"assets/smart-contracts/abi/local.json"

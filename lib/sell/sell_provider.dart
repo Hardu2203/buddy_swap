@@ -30,6 +30,8 @@ class SellProvider extends ChangeNotifier {
     // if (_authProvider?.loggedInUser?.publicKey == null) {
     //   throw Exception("No logged in user");
     // }
+    // _authProvider.sendTransaction()
+
     String loggedInUser = 'hardu'; //_authProvider!.loggedInUser!.publicKey;
     _sellOrders.add(SellOrderModel(amount, selectedCryptoType, price, selectedFiatType, SellOrderStatus.open, loggedInUser));
     notifyListeners();

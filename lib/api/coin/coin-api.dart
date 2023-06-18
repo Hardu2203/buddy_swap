@@ -1,14 +1,13 @@
 import 'package:buddy_swap/api/base-request.dart';
-import 'package:buddy_swap/api/coin/rate.dart';
-import 'package:buddy_swap/constants.dart';
 
+import '../../environment_config.dart';
 import '../request-type.dart';
 
 class CoinApi {
 
   final String _baseUrl = "https://rest.coinapi.io/v1/exchangerate";
   final _headers = {
-    'X-CoinAPI-Key': kCoinApiKey
+    'X-CoinAPI-Key': EnvironmentConfig.coinApiKey
   };
 
   static final CoinApi api =  CoinApi._internal(); //Only instance of the class
