@@ -5,6 +5,7 @@ import 'package:buddy_swap/user/user_model.dart';
 import 'package:flutter/material.dart';
 
 import '../api/backend/backend-api.dart';
+import '../environment_config.dart';
 
 class AuthProvider extends ChangeNotifier {
 
@@ -17,8 +18,8 @@ class AuthProvider extends ChangeNotifier {
     return (await authFunctions.getPublicKey(user)).publicKey;
   }
 
-  Future<String?> sendTransaction() async {
-    return await authFunctions.sendTransaction();
+  Future<String?> sendTransaction(ContractEnum contractEnum, String functionName, List<dynamic> parameters) async {
+    return await authFunctions.sendTransaction(contractEnum, "0x47f7Aa90bBD05944c0553Cf36B39c539a95291b9", functionName ,parameters);
   }
 
   void logout() {

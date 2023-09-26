@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class BuyScreen extends StatefulWidget {
   const BuyScreen({Key? key}) : super(key: key);
 
@@ -15,21 +14,6 @@ class BuyScreen extends StatefulWidget {
 class _BuyScreenState extends State<BuyScreen> {
 
   @override
-  void initState() {
-    super.initState();
-    initialize();
-  }
-
-  Future<void> initialize() {
-    return Future.delayed(
-        Duration.zero,
-            () =>
-            setState(() {
-              kEnv.contractAddress?.initialize();
-            }));
-  }
-  
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -39,10 +23,10 @@ class _BuyScreenState extends State<BuyScreen> {
       ),
       body: Center(
         child: FloatingActionButton(
-          // tooltip: kEnv.contractAddress?.wbtc ?? "",
           onPressed: () {
             context.go('/buy/details');
           },
+          child: Text(kEnv.contractAddress.wbtc.toString() ?? ""),
         ),
       ),
     );

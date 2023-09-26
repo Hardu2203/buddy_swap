@@ -19,7 +19,7 @@ const ValueKey<String> sellDetails = ValueKey<String>('Sell Details');
 
 // GoRouter configuration
 final router = GoRouter(
-  initialLocation: "/buy",
+  initialLocation: "/sell",
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
@@ -88,13 +88,13 @@ final router = GoRouter(
           ),
         ]),
   ],
-  redirect: (BuildContext context, GoRouterState state) {
-    if (Provider.of<AuthProvider>(context, listen: false).isLoggedIn()) {
-      return null;
-    } else {
-      return '/login';
-    }
-  },
+  // redirect: (BuildContext context, GoRouterState state) {
+  //   if (Provider.of<AuthProvider>(context, listen: false).isLoggedIn()) {
+  //     return null;
+  //   } else {
+  //     return '/login';
+  //   }
+  // },
 );
 
 /// A page that fades in an out.

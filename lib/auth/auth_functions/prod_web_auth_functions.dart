@@ -2,6 +2,7 @@
 
 
 
+import '../../environment_config.dart';
 import '../../user/user_model.dart';
 import 'auth_functions.dart';
 import  'js_stub.dart' if (dart.library.js) 'package:flutter_web3/flutter_web3.dart';
@@ -33,7 +34,7 @@ class ProdWebAuthFunctions implements AuthFunctions {
   }
 
   @override
-  Future<String?> sendTransaction() {
+  Future<String?> sendTransaction(ContractEnum contract, String publicKey, String functionName ,List<dynamic> parameters) {
     // TODO: implement sendTransaction
     throw UnimplementedError();
   }

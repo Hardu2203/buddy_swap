@@ -8,6 +8,7 @@ import 'my_app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await kEnv.contractAddress.initialize();
   var prefs = await SharedPreferences.getInstance();
 
   if (!prefs.containsKey(kDevThemeMode)) {

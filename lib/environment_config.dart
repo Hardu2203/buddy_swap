@@ -1,8 +1,9 @@
 import 'package:buddy_swap/blockchain/ContractConfig.dart';
+import 'package:buddy_swap/constants.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
 class EnvironmentConfig {
-  ContractAddress? contractAddress;
+  ContractAddress contractAddress;
   static const coinApiKey = String.fromEnvironment('COIN_API_KEY');
   static const backendApiUrl = String.fromEnvironment('BACKEND_API');
   static const envProfile = String.fromEnvironment('ENVIRONMENT');
@@ -32,6 +33,28 @@ class EnvironmentConfig {
         return "${abiPath}ERC20.abi";
       case ContractEnum.weth:
         return "${abiPath}ERC20.abi";
+    }
+  }
+
+  static String getContractName(ContractEnum contract) {
+    switch (contract) {
+      case ContractEnum.bank:
+        return "TokenUserBank";
+      case ContractEnum.wbtc:
+        return "WBTC";
+      case ContractEnum.weth:
+        return "WETH";
+    }
+  }
+
+  static String getContractAddress(ContractEnum contract) {
+    switch (contract) {
+      case ContractEnum.bank:
+        return kEnv.contractAddress.bank;
+      case ContractEnum.wbtc:
+        return kEnv.contractAddress.wbtc;
+      case ContractEnum.weth:
+        return kEnv.contractAddress.weth;
     }
   }
 

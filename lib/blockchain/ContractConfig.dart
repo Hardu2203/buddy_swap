@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 
 class ContractAddress {
   late String path;
-  late final String wbtc;
-  late final String weth;
-  late final String bank;
+  late String wbtc;
+  late String weth;
+  late String bank;
   late bool initialized = false;
 
   static ContractAddress? _instance;
