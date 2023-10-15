@@ -1,8 +1,6 @@
 import 'package:buddy_swap/api/coin/coin-api.dart';
 import 'package:buddy_swap/fiat/fiat_type.dart';
 import 'package:buddy_swap/sell/create_sell_order_attribute.dart';
-import 'package:buddy_swap/sell/sell_details_attribute.dart';
-import 'package:buddy_swap/sell/sell_order_model.dart';
 import 'package:buddy_swap/sell/sell_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -263,13 +261,13 @@ class _CreateSellOrderScreenState extends State<CreateSellOrderScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_priceNumberError == false &&
                         _amountNumberError == false) {
                       // If the form is valid, display a snackbar. In the real world,
                       // you'd often call a server or save the information in a database.
-                      Provider.of<SellProvider>(context, listen: false).createSellOrder(double.parse(amountController.text), selectedCryptoType, double.parse(priceController.text), selectedFiatType);
+                      String? depositTx = await Provider.of<SellProvider>(context, listen: false).createSellOrder(double.parse(amountController.text), selectedCryptoType, double.parse(priceController.text), selectedFiatType);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Sell order submitted")),
                       );

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => AuthProvider(buildAuthFunctions(config))),
         ChangeNotifierProxyProvider<AuthProvider, BackendApi>(create: (_) => BackendApi(), update: (ctx, auth, previousBackendApi) => BackendApi(auth, previousBackendApi)),
         ChangeNotifierProxyProvider<AuthProvider, BuyProvider>(create: (_) => BuyProvider(), update: (ctx, auth, previousBuyProvider) => BuyProvider(auth, previousBuyProvider)),
-        ChangeNotifierProxyProvider<AuthProvider, SellProvider>(create: (_) => SellProvider(), update: (ctx, auth, previousSellProvider) => SellProvider(auth, previousSellProvider)),
+        ChangeNotifierProxyProvider2<AuthProvider, BackendApi, SellProvider>(create: (_) => SellProvider(), update: (ctx, auth, backendApi,previousSellProvider) => SellProvider(auth, backendApi, previousSellProvider)),
         ChangeNotifierProxyProvider<AuthProvider, BankDetailsProvider>(create: (_) => BankDetailsProvider(), update: (ctx, auth, previousBankDetailsProvider) => BankDetailsProvider(auth, previousBankDetailsProvider)),
       ],
       child: MaterialApp.router(
@@ -44,7 +44,9 @@ class MyApp extends StatelessWidget {
       if (kIsWeb) {
         return ProdWebAuthFunctions();
       } else {
-        return ProdMobileAuthFunctions();
+        var prodMobileAuthFunctions = ProdMobileAuthFunctions();
+        // prodMobileAuthFunctions.init();
+        return prodMobileAuthFunctions;
       }
     } else {
       return DevAuthFunctions();

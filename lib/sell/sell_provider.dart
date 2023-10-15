@@ -1,3 +1,4 @@
+import 'package:buddy_swap/api/backend/backend-api.dart';
 import 'package:buddy_swap/crypto/crypto_types.dart';
 import 'package:buddy_swap/fiat/fiat_type.dart';
 import 'package:buddy_swap/sell/sell_order_model.dart';
@@ -12,34 +13,33 @@ class SellProvider extends ChangeNotifier {
   SellProvider? _previousSellProvider;
 
   final AuthProvider? _authProvider;
+  final BackendApi? _backendApi;
 
-  final List<SellOrderModel> _sellOrders = [
-    SellOrderModel(0.1, CryptoType.bitcoin, 5000, FiatType.zar, SellOrderStatus.open, "0x339F31Df86D58BdbA677784da1c9a970Ec42B1b8")
+  List<SellOrderModel> _sellOrders = [
+    // SellOrderModel(0.1, CryptoType.WBTC, 5000, FiatType.ZAR, SellOrderStatus.ACTIVE, "0x339F31Df86D58BdbA677784da1c9a970Ec42B1b8")
   ];
   List<SellOrderModel> get sellOrders => _sellOrders;
 
-  SellProvider([ this._authProvider, this._previousSellProvider]);
-  
-  void loadSellOrders() {
-    // _sellOrders = [
-    //   SellOrderModel(0.1, CryptoType.bitcoin, 5000, FiatType.zar, SellOrderStatus.open, "0x339F31Df86D58BdbA677784da1c9a970Ec42B1b8")
-    // ];
-    // notifyListeners();
+  SellProvider([ this._authProvider, this._backendApi, this._previousSellProvider]);
+
+  void loadSellOrders() async {
+    _sellOrders = await _backendApi!.getUserSellOrders();
+    notifyListeners();
   }
 
 
-  Future<void> createSellOrder(double amount, CryptoType selectedCryptoType, double price, FiatType selectedFiatType) async {
+  Future<String?> createSellOrder(double amount, CryptoType selectedCryptoType, double price, FiatType selectedFiatType) async {
     // if (_authProvider?.loggedInUser?.publicKey == null) {
     //   throw Exception("No logged in user");
     // }
     // _authProvider.sendTransaction()
 
-    String? res = await _authProvider?.sendTransaction(ContractEnum.wbtc, "approve", [EthereumAddress.fromHex(kEnv.contractAddress.bank), BigInt.from(72)]);
+    String? approvedTx = await _authProvider?.sendTransaction(selectedCryptoType.contract, "approve", [EthereumAddress.fromHex(kEnv.contractAddress.bank), BigInt.from(amount)]);
 
-    String? res2 = await _authProvider?.sendTransaction(ContractEnum.bank, "deposit", [EthereumAddress.fromHex(kEnv.contractAddress.wbtc), BigInt.from(2), BigInt.from(42) ]);
+    String? depositTx = await _authProvider?.sendTransaction(ContractEnum.bank, "deposit", [EthereumAddress.fromHex(EnvironmentConfig.getContractAddress(selectedCryptoType.contract)), BigInt.from(amount), BigInt.from(price) ]);
     // String? res2 = await _authProvider?.sendTransaction(ContractEnum.bank, "getContractBalance", [EthereumAddress.fromHex(kEnv.contractAddress.wbtc) ]);
 
-    print('cool');
+    return depositTx;
     // String loggedInUser = 'hardu'; //_authProvider!.loggedInUser!.publicKey;
     // _sellOrders.add(SellOrderModel(amount, selectedCryptoType, price, selectedFiatType, SellOrderStatus.open, loggedInUser));
     // notifyListeners();

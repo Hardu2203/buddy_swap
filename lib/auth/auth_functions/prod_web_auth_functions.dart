@@ -2,6 +2,8 @@
 
 
 
+import 'package:flutter/src/widgets/framework.dart';
+
 import '../../environment_config.dart';
 import '../../user/user_model.dart';
 import 'auth_functions.dart';
@@ -34,7 +36,7 @@ class ProdWebAuthFunctions implements AuthFunctions {
   }
 
   @override
-  Future<String?> sendTransaction(ContractEnum contract, String publicKey, String functionName ,List<dynamic> parameters) {
+  Future<String?> sendTransaction(ContractEnum contract, String functionName ,List<dynamic> parameters) {
     // TODO: implement sendTransaction
     throw UnimplementedError();
   }
@@ -42,6 +44,48 @@ class ProdWebAuthFunctions implements AuthFunctions {
   @override
   signMessage(String nonce) {
     // TODO: implement signMessage
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Widget> initializeWeb3(BuildContext context) {
+    // TODO: implement initialize
+    throw UnimplementedError();
+  }
+
+  @override
+  clearJwt() {
+    // TODO: implement clearJwt
+    throw UnimplementedError();
+  }
+
+  @override
+  storeJwt(String jwt) {
+    // TODO: implement storeJwt
+    throw UnimplementedError();
+  }
+
+  @override
+  bool isWeb3Connected() {
+    // TODO: implement isConnected
+    throw UnimplementedError();
+  }
+
+  @override
+  initWeb3Handlers(BuildContext context) {
+    // TODO: implement initWeb3Handlers
+    throw UnimplementedError();
+  }
+
+  @override
+  connectHandler(BuildContext context) {
+    // TODO: implement connectHandler
+    throw UnimplementedError();
+  }
+
+  @override
+  logout() {
+    // TODO: implement logout
     throw UnimplementedError();
   }
 

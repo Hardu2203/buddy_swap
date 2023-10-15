@@ -1,12 +1,16 @@
 import 'package:buddy_swap/blockchain/ContractConfig.dart';
 import 'package:buddy_swap/constants.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter/services.dart';
+import 'package:web3dart/contracts.dart';
+import 'package:web3dart/credentials.dart';
 
 class EnvironmentConfig {
   ContractAddress contractAddress;
   static const coinApiKey = String.fromEnvironment('COIN_API_KEY');
   static const backendApiUrl = String.fromEnvironment('BACKEND_API');
   static const envProfile = String.fromEnvironment('ENVIRONMENT');
+  static const projectId = String.fromEnvironment('PROJECT_ID');
 
   static EnvironmentConfig? _instance;
 
@@ -69,7 +73,12 @@ class EnvironmentConfig {
   static const address = "assets/smart-contracts/address/";
 }
 
-enum ContractEnum { wbtc, weth, bank }
+enum ContractEnum {
+  wbtc,
+  weth,
+  bank;
+
+}
 
 enum EnvironmentEnum {
   local,

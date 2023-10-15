@@ -6,11 +6,11 @@ import 'package:buddy_swap/api/request-type.dart';
 import 'package:http/http.dart';
 import 'package:retry/retry.dart';
 
-class BaseRequest<T> {
+class BaseRequest<T, S> {
   final String baseUrl;
   final String path;
   final ReqType requestType;
-  final T Function(Map<String, dynamic>)? mapping;
+  final T Function(S)? mapping;
   final Object? json;
   final Map<String, String>? headers;
   final Map<String, dynamic>? queryParams;

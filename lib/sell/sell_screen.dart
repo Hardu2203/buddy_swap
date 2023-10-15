@@ -1,21 +1,13 @@
-import 'dart:io';
-
-import 'package:buddy_swap/auth/auth_provider.dart';
 import 'package:buddy_swap/bank/bank_details_provider.dart';
 import 'package:buddy_swap/constants.dart';
 import 'package:buddy_swap/crypto/crypto_types.dart';
-import 'package:buddy_swap/environment_config.dart';
 import 'package:buddy_swap/fiat/fiat_type.dart';
-import 'package:buddy_swap/sell/sell_details_attribute.dart';
 import 'package:buddy_swap/sell/sell_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
-import 'package:web3dart/credentials.dart';
-
-import '../bank/bank_splash_screen.dart';
 
 class SellScreen extends StatefulWidget {
   const SellScreen({Key? key}) : super(key: key);
@@ -25,23 +17,37 @@ class SellScreen extends StatefulWidget {
 }
 
 class _SellScreenState extends State<SellScreen> {
+  GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+  bool initialized = false;
+
   @override
   void initState() {
     super.initState();
     fetchSellOrders();
   }
 
-  Future<void> fetchSellOrders() {
-    return Future.delayed(
+  Future<void> fetchSellOrders() async {
+    Future.delayed(
         Duration.zero,
         () => setState(() {
               Provider.of<SellProvider>(context, listen: false)
                   .loadSellOrders();
             }));
+    setState(() {
+      initialized = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (initialized != true) {
+      Center(
+        child: CircularProgressIndicator(
+          color: Colors.black45,
+        ),
+      );
+    }
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -56,9 +62,15 @@ class _SellScreenState extends State<SellScreen> {
               // if (!bankProvider.isSet())
               //   const BankSplashScreen()
               // else
-              sellProvider.sellOrders.isEmpty
-                  ? emptySellOrdersSplash(deviceSize, context)
-                  : buildListView(sellProvider),
+              if (sellProvider.sellOrders.isEmpty) emptySellOrdersSplash(deviceSize, context),
+
+              // sellProvider.sellOrders.isEmpty
+              //     ? emptySellOrdersSplash(deviceSize, context)
+              //     :
+              RefreshIndicator(
+                      key: refreshIndicatorKey,
+                      onRefresh: fetchSellOrders,
+                      child: buildListView(sellProvider)),
               if (bankProvider.isSet())
                 createProvideBankDetailsButton(context)
               else
@@ -77,10 +89,10 @@ class _SellScreenState extends State<SellScreen> {
         Center(
           child: ElevatedButton(
               onPressed: () async {
-                // context.go("/sell/create");
-                var result =
-                    await Provider.of<SellProvider>(context, listen: false)
-                        .createSellOrder(20, CryptoType.bitcoin, 200, FiatType.zar);
+                context.go("/sell/create");
+                // var result =
+                //     await Provider.of<SellProvider>(context, listen: false)
+                //         .createSellOrder(20, CryptoType.WBTC, 200, FiatType.ZAR);
                 // await Provider.of<AuthProvider>(context, listen: false)
                 //     .sendTransaction(ContractEnum.wbtc, "approve", [EthereumAddress.fromHex(kEnv.contractAddress.bank), BigInt.from(70)]);
 
@@ -143,7 +155,7 @@ class _SellScreenState extends State<SellScreen> {
   ListView buildListView(SellProvider sellProvider) {
     return ListView.builder(
         itemCount: sellProvider.sellOrders.length,
-        shrinkWrap: true,
+        shrinkWrap: false,
         itemBuilder: (context, index) {
           // return Padding(
           //   padding: const EdgeInsets.all(8.0),

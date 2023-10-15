@@ -1,3 +1,4 @@
+import 'package:buddy_swap/api/backend/backend-api.dart';
 import 'package:buddy_swap/auth/auth_provider.dart';
 import 'package:buddy_swap/buy/buy_details_screen.dart';
 import 'package:buddy_swap/buy/buy_screen.dart';
@@ -19,7 +20,7 @@ const ValueKey<String> sellDetails = ValueKey<String>('Sell Details');
 
 // GoRouter configuration
 final router = GoRouter(
-  initialLocation: "/sell",
+  initialLocation: "/login",
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
@@ -74,27 +75,31 @@ final router = GoRouter(
             ],
           ),
           GoRoute(
-            path: '/settings',
-            pageBuilder: (BuildContext context, GoRouterState state) =>
-                FadeTransitionPage(key: sellDetails, child: const SettingsScreen()),
-            routes: [
-              GoRoute(
-                path: 'bank',
-                pageBuilder: (BuildContext context, GoRouterState state) =>
-                    FadeTransitionPage(
-                        key: buyDetails, child: const BankDetailsScreen()),
-              ),
-            ]
-          ),
+              path: '/settings',
+              pageBuilder: (BuildContext context, GoRouterState state) =>
+                  FadeTransitionPage(
+                      key: sellDetails, child: const SettingsScreen()),
+              routes: [
+                GoRoute(
+                  path: 'bank',
+                  pageBuilder: (BuildContext context, GoRouterState state) =>
+                      FadeTransitionPage(
+                          key: buyDetails, child: const BankDetailsScreen()),
+                ),
+              ]),
         ]),
   ],
-  // redirect: (BuildContext context, GoRouterState state) {
-  //   if (Provider.of<AuthProvider>(context, listen: false).isLoggedIn()) {
-  //     return null;
-  //   } else {
-  //     return '/login';
-  //   }
-  // },
+  redirect: (BuildContext context, GoRouterState state) async {
+    // var authProvider = Provider.of<AuthProvider>(context, listen: false);
+    // var backendApi = Provider.of<BackendApi>(context, listen: false);
+    // await authProvider.initializeWeb3(context);
+    //
+    // if (await authProvider.isLoggedIn() && authProvider.isWeb3Connected()) {
+    //   await backendApi.assignUser();
+    //   return null;
+    // }
+    // return '/login';
+  },
 );
 
 /// A page that fades in an out.

@@ -2,8 +2,8 @@ import 'package:buddy_swap/constants.dart';
 import 'package:flutter/foundation.dart';
 
 enum FiatType {
-  zar,
-  usd
+  ZAR,
+  USD
 }
 
 extension FiatTypeExtension on FiatType {
@@ -11,27 +11,27 @@ extension FiatTypeExtension on FiatType {
 
   String get denominator {
     switch (this) {
-      case FiatType.zar:
+      case FiatType.ZAR:
         return "R ";
-      case FiatType.usd:
+      case FiatType.USD:
         return "\$ ";
     }
   }
 
   String get ticker {
     switch (this) {
-      case FiatType.zar:
+      case FiatType.ZAR:
         return "ZAR";
-      case FiatType.usd:
+      case FiatType.USD:
         return "USD";
     }
   }
 
   String get logo {
     switch (this) {
-      case FiatType.zar:
+      case FiatType.ZAR:
         return kSouthAfricaFlagPath;
-      case FiatType.usd:
+      case FiatType.USD:
         return kUnitedStatesOfAmericaFlagPath;
     }
   }

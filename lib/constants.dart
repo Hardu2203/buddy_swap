@@ -13,5 +13,4 @@ const String kDevThemeMode = "devThemeMode";
 const String kProdThemeMode = "prodThemeMode";
 
 
-
 EnvironmentConfig kEnv = EnvironmentConfig.instance(); //"assets/smart-contracts/abi/local.json"

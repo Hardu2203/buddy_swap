@@ -1,9 +1,15 @@
 import 'package:buddy_swap/constants.dart';
 import 'package:flutter/foundation.dart';
 
+import '../environment_config.dart';
+
 enum CryptoType {
-  ethereum,
-  bitcoin
+  WETH(ContractEnum.weth),
+  WBTC(ContractEnum.wbtc);
+
+  final ContractEnum contract;
+
+  const CryptoType(this.contract);
 }
 
 extension FiatTypeExtension on CryptoType {
@@ -11,18 +17,18 @@ extension FiatTypeExtension on CryptoType {
 
   String get logo {
     switch (this) {
-      case CryptoType.bitcoin:
+      case CryptoType.WBTC:
         return kBitcoinLogoPath;
-      case CryptoType.ethereum:
+      case CryptoType.WETH:
         return kEthereumLogoPath;
     }
   }
 
   String get ticker {
     switch (this) {
-      case CryptoType.bitcoin:
+      case CryptoType.WBTC:
         return "BTC";
-      case CryptoType.ethereum:
+      case CryptoType.WETH:
         return "ETH";
     }
   }

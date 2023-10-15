@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:walletconnect_modal_flutter/widgets/walletconnect_modal_theme.dart';
 
 import '../auth_provider.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -19,6 +21,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   UserModel? _loggedInUser;
+  Widget? _loginWidget;
+  bool _initialized = false;
 
   List<Widget> devUserSelect(Size deviceSize) {
     return [
@@ -32,8 +36,47 @@ class _LoginScreenState extends State<LoginScreen> {
     _loggedInUser = selectedUser;
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    initialize();
+  }
+
+  Future<void> initialize() async {
+
+    // var authProvider = Provider.of<AuthProvider>(context, listen: false);
+    // _loginWidget = await authProvider.initializeWeb3(context);
+
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
+    var backendApi = Provider.of<BackendApi>(context, listen: false);
+    _loginWidget = await authProvider.initializeWeb3(context);
+
+    if (await authProvider.isLoggedIn() && authProvider.isWeb3Connected()) {
+      await backendApi.assignUser();
+      GoRouter.of(context).go('/sell');
+    } else if (await authProvider.refreshTokenIsValid()) {
+      backendApi.loginWithRefreshToken();
+      GoRouter.of(context).go('/sell');
+    } else {
+      backendApi.logout();
+    }
+
+    setState(() {
+      _initialized = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!_initialized) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: WalletConnectModalTheme.getData(context).primary100,
+        ),
+      );
+    }
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
@@ -57,14 +100,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.all(10),
                 child: ListView(
                   children: <Widget>[
-                    // Container(
-                    //   alignment: Alignment.center,
-                    //   padding: const EdgeInsets.all(10),
-                    //   child: Text(
-                    //     'BuddySwap',
-                    //     style: Theme.of(context).textTheme.displayLarge,
-                    //   ),
-                    // ),
                     SizedBox(
                       height: deviceSize.height * 0.2,
                     ),
@@ -106,20 +141,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: deviceSize.height * 0.05,
                     ),
-                    Container(
-                        height: 50,
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        child: ActionChip(
-                          avatar: Image.asset(
-                            'assets/images/metamask-logo-png-transparent.png',
-                            height: 24,
-                          ),
-                          label: const Text('Connect Wallet'),
-                          onPressed: () async {
-                            var login = await Provider.of<BackendApi>(context, listen: false).login(_loggedInUser);
-                            if (context.mounted && login) GoRouter.of(context).go('/buy');
-                          },
-                        )),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _loginWidget!
+                      ],
+                    ),
                   ],
                 ),
               ),
