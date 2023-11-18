@@ -43,6 +43,7 @@ class SellProvider extends ChangeNotifier {
     // String loggedInUser = 'hardu'; //_authProvider!.loggedInUser!.publicKey;
     // _sellOrders.add(SellOrderModel(amount, selectedCryptoType, price, selectedFiatType, SellOrderStatus.open, loggedInUser));
     // notifyListeners();
+    // return approvedTx;
   }
 
   void deleteSellOrder(int index) {

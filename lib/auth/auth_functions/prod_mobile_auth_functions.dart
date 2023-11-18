@@ -37,7 +37,7 @@ class ProdMobileAuthFunctions extends ChangeNotifier implements AuthFunctions {
   String? _chainId;
   String? _account;
 
-  final String _chainIdCurrent = "eip155:1697260901251";
+  final String _chainIdCurrent = "eip155:5";
 
   @override
   Future<String?> sendTransaction(ContractEnum contractEnum, String functionName, List<dynamic> parameters) async {
@@ -49,7 +49,9 @@ class ProdMobileAuthFunctions extends ChangeNotifier implements AuthFunctions {
       function: fun,
       parameters: parameters,
       from: EthereumAddress.fromHex(_account!),
-      gasPrice: EtherAmount.inWei(BigInt.one),
+      gasPrice: EtherAmount.inWei(BigInt.from(30000000000)),
+      maxFeePerGas: EtherAmount.inWei(BigInt.from(50000000000)),
+      maxPriorityFeePerGas: EtherAmount.inWei(BigInt.from(10000000000)),
       maxGas: 1000000,
     );
 
@@ -57,7 +59,7 @@ class ProdMobileAuthFunctions extends ChangeNotifier implements AuthFunctions {
     //widget.session.topic
     Future tx = _web3App!.request(
       topic: _web3App!.sessions.getAll().first.topic,
-      chainId: _chainId!,
+      chainId: getChainId()!,
       request: SessionRequestParams(
         method: 'eth_sendTransaction',
         // Check the `web3dart_extension` file for this function

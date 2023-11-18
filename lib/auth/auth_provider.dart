@@ -89,7 +89,7 @@ class AuthProvider extends ChangeNotifier {
   tokenIsValid(String token) {
     DateTime? expiryDate = Jwt.getExpiryDate(token);
     if (expiryDate == null) return false;
-    if (DateTime.now().isAfter(expiryDate)) return false;
+    if ((DateTime.now().toLocal()).isAfter(expiryDate.toLocal())) return false;
 
     return true;
   }
